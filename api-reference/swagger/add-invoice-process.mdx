@@ -1,0 +1,31 @@
+---
+title: 'Add Invoice Process'
+openapi: 'POST /accounting/invoice/process'
+---
+
+Stores invoice process scheduled data for later processing.
+
+<Warning>
+This will attempt to send data to the live API if you hit Try it out. Use with caution or a mock server.
+</Warning>
+
+```api
+- name: Example: Add Invoice Process
+  method: POST
+  path: /accounting/invoice/process
+  headers:
+    Content-Type: application/json
+  body:
+    schema:
+      type: object
+      properties:
+        id:
+          type: number
+        status:
+          type: string
+      required:
+        - id
+        - status
+    example: |
+      { "id": 1, "status": "scheduled" }
+```

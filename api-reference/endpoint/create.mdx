@@ -1,4 +1,36 @@
 ---
-title: 'Create Plant'
-openapi: 'POST /plants'
+title: 'Create Post'
+openapi: 'POST /posts'
 ---
+
+Overview
+
+- Creates a new post. JSONPlaceholder fakes creation and responds with a new id.
+- Great for demonstrating request bodies, validation, and response handling without needing a backend.
+
+Request body
+- userId (number, required): The author id.
+- title  (string, required): Title for the post.
+- body   (string, required): The content.
+
+Example usage
+
+```api
+- name: Create a post
+  method: POST
+  path: /posts
+  headers:
+    Content-Type: application/json
+  body:
+    json:
+      userId: 1
+      title: "Hello Mintlify"
+      body: "This is a demo post created from the API playground."
+```
+
+Response notes
+- Status 201: Returns the post object with a generated id.
+- JSONPlaceholder does not persist data; subsequent GETs won’t include this post.
+
+Tips
+- Use this alongside GET /posts to illustrate the difference between mocked creation and read-only data.

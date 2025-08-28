@@ -1,4 +1,29 @@
 ---
-title: 'New Plant'
-openapi: 'WEBHOOK /plant/webhook'
+title: 'Get Post by ID'
+openapi: 'GET /posts/{id}'
 ---
+
+Overview
+
+- Returns a single post by its id.
+- Helpful to demonstrate path parameters and error handling for missing resources.
+
+Path parameter
+- id (number): The post id to fetch.
+
+Example usage
+
+```api
+- name: Get post 1
+  method: GET
+  path: /posts/1
+  headers:
+    Accept: application/json
+```
+
+Response notes
+- Status 200: A Post object with id, userId, title, body.
+- Status 404: Not found (JSONPlaceholder returns an empty object for some endpoints; behavior may vary across resources).
+
+Tips
+- Chain this with GET /comments?postId=1 to show related data fetching.

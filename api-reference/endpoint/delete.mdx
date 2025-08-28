@@ -1,4 +1,26 @@
 ---
-title: 'Delete Plant'
-openapi: 'DELETE /plants/{id}'
+title: 'Delete Post'
+openapi: 'DELETE /posts/{id}'
 ---
+
+Overview
+
+- Deletes a post by id. JSONPlaceholder simulates deletion and returns a success status without persisting.
+
+Path parameter
+- id (number): The post id to delete.
+
+Example usage
+
+```api
+- name: Delete post 1
+  method: DELETE
+  path: /posts/1
+```
+
+Response notes
+- Status 200: JSONPlaceholder typically returns an empty object or success.
+- Data is not actually removed from subsequent GET responses on /posts.
+
+Tips
+- Use after creating a post to show lifecycle, then GET to show read-only nature of the dataset.

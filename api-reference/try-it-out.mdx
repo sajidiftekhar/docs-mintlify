@@ -1,0 +1,71 @@
+---
+title: "Try it out"
+description: "Interactive API playground: JSONPlaceholder demo"
+---
+
+<Note>
+  This page showcases Mintlify's interactive API playground wired to JSONPlaceholder.
+  No authentication is required. You can modify inputs and send real requests live.
+</Note>
+
+## Live requests (from OpenAPI)
+
+The blocks below use the base URL https://jsonplaceholder.typicode.com from the OpenAPI spec.
+
+```api
+- name: List posts (limit 3)
+  method: GET
+  path: /posts
+  query:
+    _limit: 3
+  headers:
+    Accept: application/json
+
+- name: Get a post by id
+  method: GET
+  path: /posts/1
+  headers:
+    Accept: application/json
+
+- name: Create a post
+  method: POST
+  path: /posts
+  headers:
+    Content-Type: application/json
+  body:
+    json:
+      userId: 1
+      title: "Using Mintlify Try it out"
+      body: "Created from the live playground."
+
+- name: List comments for a post
+  method: GET
+  path: /comments
+  query:
+    postId: 1
+```
+
+## What this demo covers
+
+- How to connect an OpenAPI spec and let pages auto-resolve endpoints via frontmatter.
+- How to use inline request blocks to run live calls without code.
+- How to document behaviors (mocked creation, read-only dataset, query params, path params).
+
+## Authoring and editing showcase
+
+<Tabs>
+  <Tab title="Callouts">
+    <Tip>Use tips for best practices and pro-tips.</Tip>
+    <Caution>JSONPlaceholder is a demo API: writes are mocked and not persisted.</Caution>
+  </Tab>
+  <Tab title="Reusable snippets">
+    You can include reusable content with MDX snippets to keep docs DRY.
+  </Tab>
+  <Tab title="Code blocks">
+
+```ts
+// TypeScript example snippet (editable)
+interface Post { id: number; userId: number; title: string; body: string }
+```
+  </Tab>
+</Tabs>

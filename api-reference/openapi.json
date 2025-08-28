@@ -1,216 +1,133 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
+    "title": "JSONPlaceholder Demo API",
+    "description": "Demo OpenAPI spec wired to JSONPlaceholder (https://jsonplaceholder.typicode.com) to showcase Mintlify 'Try it out'.",
     "version": "1.0.0"
   },
   "servers": [
-    {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
-  "security": [
-    {
-      "bearerAuth": []
-    }
+    { "url": "https://jsonplaceholder.typicode.com" }
   ],
   "paths": {
-    "/plants": {
+    "/posts": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
+        "summary": "List posts",
+        "description": "Returns a list of posts. Supports limiting results via _limit query param.",
         "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
+          { "name": "_limit", "in": "query", "description": "Max number of posts to return", "schema": { "type": "integer", "minimum": 1, "maximum": 100 } }
         ],
         "responses": {
           "200": {
-            "description": "Plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "A JSON array of posts",
+            "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Post" } } } }
           }
         }
       },
       "post": {
-        "description": "Creates a new plant in the store",
+        "summary": "Create a post",
+        "description": "Creates a new post (JSONPlaceholder fakes creation and returns an object with an id).",
         "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/NewPost" } } }
         },
         "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+          "201": {
+            "description": "Created post (mocked)",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Post" } } }
           }
         }
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
+    "/posts/{id}": {
+      "get": {
+        "summary": "Get post by ID",
+        "parameters": [ { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } } ],
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
+          "200": { "description": "Post", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Post" } } } },
+          "404": { "description": "Not found" }
+        }
+      },
+      "put": {
+        "summary": "Replace a post",
+        "parameters": [ { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } } ],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/NewPost" } } } },
+        "responses": { "200": { "description": "Updated post (mocked)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Post" } } } } }
+      },
+      "patch": {
+        "summary": "Update a post",
+        "parameters": [ { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } } ],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PartialPost" } } } },
+        "responses": { "200": { "description": "Updated post (mocked)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Post" } } } } }
+      },
+      "delete": {
+        "summary": "Delete a post",
+        "parameters": [ { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } } ],
+        "responses": { "200": { "description": "Deleted (mocked)" } }
+      }
+    },
+    "/comments": {
+      "get": {
+        "summary": "List comments by postId",
+        "parameters": [ { "name": "postId", "in": "query", "required": true, "schema": { "type": "integer" } } ],
+        "responses": {
+          "200": { "description": "Comments for the post", "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Comment" } } } } }
         }
       }
-    }
-  },
-  "webhooks": {
-    "/plant/webhook": {
-      "post": {
-        "description": "Information about a new plant added to the store",
-        "requestBody": {
-          "description": "Plant added to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
-          }
-        }
+    },
+    "/users/{id}": {
+      "get": {
+        "summary": "Get user by ID",
+        "parameters": [ { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } } ],
+        "responses": { "200": { "description": "User", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/User" } } } } }
       }
     }
   },
   "components": {
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "Post": {
         "type": "object",
         "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
-          },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
-          }
+          "userId": { "type": "integer" },
+          "id": { "type": "integer" },
+          "title": { "type": "string" },
+          "body": { "type": "string" }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          }
-        ]
+      "NewPost": {
+        "type": "object",
+        "required": ["title", "body", "userId"],
+        "properties": {
+          "userId": { "type": "integer" },
+          "title": { "type": "string" },
+          "body": { "type": "string" }
+        }
       },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
+      "PartialPost": {
         "type": "object",
         "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
-          }
+          "userId": { "type": "integer" },
+          "title": { "type": "string" },
+          "body": { "type": "string" }
         }
-      }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
+      },
+      "Comment": {
+        "type": "object",
+        "properties": {
+          "postId": { "type": "integer" },
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "body": { "type": "string" }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "username": { "type": "string" },
+          "email": { "type": "string", "format": "email" }
+        }
       }
     }
   }

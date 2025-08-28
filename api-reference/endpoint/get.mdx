@@ -1,4 +1,35 @@
 ---
-title: 'Get Plants'
-openapi: 'GET /plants'
+title: 'List Posts'
+openapi: 'GET /posts'
 ---
+
+Overview
+
+- Returns a list of posts from JSONPlaceholder.
+- No authentication required; perfect for demos of Mintlify Try it out.
+
+When to use
+- Fetch sample content items for demos, prototypes, or to test API flows.
+
+Query parameters
+- _limit (number): Optional. Maximum number of posts to return (1-100). Useful to keep responses short in demos.
+
+Example usage
+
+```api
+- name: List first 5 posts
+  method: GET
+  path: /posts
+  query:
+    _limit: 5
+  headers:
+    Accept: application/json
+```
+
+Response notes
+- Status 200: An array of Post objects with fields id, userId, title, and body.
+- JSONPlaceholder returns static seeded data; repeated calls return the same list unless filtered.
+
+Tips
+- Combine with /comments?postId={id} to show relationships.
+- Use _limit to keep responses compact for readers.
